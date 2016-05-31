@@ -48,6 +48,10 @@ This is in contrast to merely setting it to 0."
   (let ((keys (plist-get (oref im :index) value)))
     (when keys (car keys))))
 
+(defmethod term-manager-im-maybe-put ((im term-manager-im) key value)
+  (unless (equal (term-manager-im-get key) value)
+    (term-manager-im-put im key value)))
+
 (defmethod term-manager-im-put ((im term-manager-im) key value)
   ;; Handle removing the key from where it is currently indexed
   (term-manager-im-unindex im key)
