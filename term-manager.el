@@ -30,6 +30,7 @@
 (require 'eieio)
 (require 'dash)
 (require 'term-manager-indexed-mapping)
+(require 'cl-lib)
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
