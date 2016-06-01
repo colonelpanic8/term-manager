@@ -83,7 +83,10 @@
          (default-directory directory)
          (program (getenv "SHELL"))
          (buffer (get-buffer
-                  (term-ansi-make-term "new term" program))))
+                  ;; We need to use a name that is guaranteed to be
+                  ;; unique so that term-ansi-make-term always makes a
+                  ;; new term.
+                  (term-ansi-make-term "new term temp name" program))))
     (with-current-buffer buffer
       (term-mode)
       (term-char-mode))
