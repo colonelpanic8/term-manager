@@ -49,7 +49,7 @@ This is in contrast to merely setting it to 0."
     (when keys (car keys))))
 
 (defmethod term-manager-im-maybe-put ((im term-manager-im) key value)
-  (unless (equal (term-manager-im-get key) value)
+  (unless (equal (term-manager-im-get im key) value)
     (term-manager-im-put im key value)))
 
 (defmethod term-manager-im-put ((im term-manager-im) key value)
