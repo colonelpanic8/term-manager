@@ -6,7 +6,7 @@
 ;; Keywords: term manager
 ;; URL: https://www.github.com/IvanMalison/term-manager
 ;; Version: 0.0.0
-;; Package-Requires: ((dash "2.12.0") (emacs "24"))
+;; Package-Requires: ((dash "2.12.0") (emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 (require 'eieio)
 (require 'dash)
 (require 'term-manager-indexed-mapping)
+(require 'cl-lib)
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
