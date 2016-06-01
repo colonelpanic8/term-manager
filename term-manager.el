@@ -83,8 +83,7 @@
          (default-directory directory)
          (program (getenv "SHELL"))
          (buffer (get-buffer
-                  (term-ansi-make-term
-                   (term-manager-default-name-buffer nil directory) program))))
+                  (term-ansi-make-term "new term" program))))
     (with-current-buffer buffer
       (term-mode)
       (term-char-mode))
