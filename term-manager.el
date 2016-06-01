@@ -92,9 +92,11 @@
 
 (defmethod term-manager-build-term ((tm term-manager) &optional symbol)
   (unless symbol (setq symbol (term-manager-get-symbol tm)))
-  (let ((build-term (or (oref tm :build-term)
-                        'term-manager-default-build-term)))
-    (funcall build-term symbol)))
+  (let* ((build-term (or (oref tm :build-term)
+                         'term-manager-default-build-term))
+         (buffer (funcall build-term symbol)))
+    (term-manager-on-update-context tm buffer)
+    buffer))
 
 (defun term-manager-default-name-buffer (buffer symbol)
   (format "term - %s" symbol))
@@ -103,7 +105,7 @@
   (let ((name-buffer (or (oref tm :name-buffer)
                          'term-manager-default-name-buffer)))
     (unless buffer (setq buffer (current-buffer)))
-    (funcall name-buffer buffer (term-manger-get-symbol tm buffer))))
+    (funcall name-buffer buffer (term-manager-get-symbol tm buffer))))
 
 (defmethod term-manager-rename-buffer ((tm term-manager) &optional buffer)
   (with-current-buffer buffer
@@ -121,8 +123,9 @@
                 (term-manager-on-update-context tm))))
 
 (defmethod term-manager-on-update-context ((tm term-manager) &optional buffer)
+  (unless buffer (setq buffer (current-buffer)))
   (term-manager-update-index-for-buffer tm buffer)
-  (term-manager-rename-buffer buffer))
+  (term-manager-rename-buffer tm buffer))
 
 (provide 'term-manager)
 ;;; term-manager.el ends here

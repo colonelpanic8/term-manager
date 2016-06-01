@@ -61,5 +61,10 @@
 (defun term-projectile-new-at-default-directory ()
   (term-projectile-switch nil default-directory))
 
+(defun term-projectile-create-new (&optional directory)
+  (interactive)
+  (switch-to-buffer
+   (term-manager-build-term term-projectile-term-manager directory)))
+
 (provide 'term-projectile)
 ;;; term-projectile.el ends here
