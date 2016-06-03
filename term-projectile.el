@@ -6,7 +6,7 @@
 ;; Keywords: term manager projectile
 ;; URL: https://www.github.com/IvanMalison/term-projectile
 ;; Version: 0.0.0
-;; Package-Requires: ((term-manager))
+;; Package-Requires: ((term-manager "0.0.0") (projectile "0.13.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
