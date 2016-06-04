@@ -6,7 +6,7 @@
 ;; Keywords: term manager projectile
 ;; URL: https://www.github.com/IvanMalison/term-projectile
 ;; Version: 0.0.0
-;; Package-Requires: ((term-manager "0.0.0") (projectile "0.13.0"))
+;; Package-Requires: ((term-manager "0.0.0") (projectile "0.13.0") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 (require 'term-manager)
 
 (defun term-projectile ()
+  "Make a new term-manger instance configured for projectile usage."
   (interactive)
   (let ((manager
          (make-instance term-manager
@@ -51,10 +52,14 @@
    term-projectile-term-manager directory delta))
 
 (defun term-projectile-forward ()
+  "Switch forward to the next term-projectile ansi-term buffer.
+Make a new one if none exists."
   (interactive)
   (term-projectile-switch 1))
 
 (defun term-projectile-backward ()
+  "Switch backward to the next term-projectile ansi-term buffer.
+Make a new one if none exists."
   (interactive)
   (term-projectile-switch -1))
 
@@ -62,6 +67,8 @@
   (term-projectile-switch nil default-directory))
 
 (defun term-projectile-create-new (&optional directory)
+  "Make a new `ansi-term' buffer for DIRECTORY.
+If directory is nil, use the current projectile project"
   (interactive)
   (switch-to-buffer
    (term-manager-build-term term-projectile-term-manager directory)))
