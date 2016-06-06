@@ -27,10 +27,11 @@
 
 ;;; Code:
 
-(require 'eieio)
-(require 'dash)
-(require 'term-manager-indexed-mapping)
 (require 'cl-lib)
+(require 'dash)
+(require 'eieio)
+(require 'term)
+(require 'term-manager-indexed-mapping)
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
@@ -39,7 +40,7 @@
    (name-buffer :initarg :name-buffer :initform nil)
    (build-term :initarg :build-term :initform nil)))
 
-(defmethod term-manager-get-next-buffer-index ((tm term-manager)
+(defmethod term-manager-get-next-buffer-index ((_tm term-manager)
                                                buffers &optional delta)
   (unless delta (setq delta 1))
   (let* ((the-current-buffer (current-buffer))
@@ -101,7 +102,7 @@
     (term-manager-on-update-context tm buffer)
     buffer))
 
-(defun term-manager-default-name-buffer (buffer symbol)
+(defun term-manager-default-name-buffer (_buffer symbol)
   (format "term - %s" symbol))
 
 (defmethod term-manager-get-buffer-name ((tm term-manager) &optional buffer)
@@ -122,7 +123,7 @@
 
 (defmethod term-manager-enable-buffer-renaming-and-reindexing ((tm term-manager))
   (advice-add 'term-handle-ansi-terminal-messages :after
-              (lambda (&rest args)
+              (lambda (&rest _args)
                 (term-manager-on-update-context tm))))
 
 (defmethod term-manager-on-update-context ((tm term-manager) &optional buffer)
