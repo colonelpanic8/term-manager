@@ -1,0 +1,22 @@
+
+term-manager ([[http://melpa.org/#/term-manager][file:http://melpa.org/packages/term-manager-badge.svg]]) is used to support term-projectile
+([[http://melpa.org/#/term-projectile][file:http://melpa.org/packages/term-projectile-badge.svg]]). term-manager can be used without term-projectile, but no such use case is currently known.
+
+term-projectile manages terminals based on the current projectile context.
+
+Install from MELPA with ~M-x package-install term-projectile~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
+
+* Setup
+
+The author prefers to set up term-projectile using the following [[https://github.com/abo-abo/hydra][hydra]]:
+#+BEGIN_SRC emacs-lisp
+  (defhydra imalison:term-hydra (global-map  "C-c 7")
+    "term"
+    ("n" term-projectile-forward)
+    ("p" term-projectile-backward)
+    ("c" term-projectile-create-new))
+#+END_SRC
+
+When term-projectile-forward is executed in a projectile project where no terminal currently exists, a new ansi-term instance will be created. If one already exists, pressing that key binding will take the user to the existing ansi-term instance for that project.
+
+* TODO section about automatic adjustment of the default directory
