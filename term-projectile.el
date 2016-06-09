@@ -51,27 +51,45 @@
   (term-manager-switch-to-buffer
    term-projectile-term-manager directory delta))
 
+;;;###autoload
 (defun term-projectile-forward ()
   "Switch forward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
   (term-projectile-switch 1))
 
+;;;###autoload
 (defun term-projectile-backward ()
   "Switch backward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
   (term-projectile-switch -1))
 
-(defun term-projectile-new-at-default-directory ()
+;;;###autoload
+(defun term-projectile-default-directory-forward ()
+  "Switch forward to the next term-projectile ansi-term buffer for `defualt-directory'."
+  (interactive)
   (term-projectile-switch nil default-directory))
 
+;;;###autoload
+(defun term-projectile-default-directory-backward ()
+  "Switch backward to the next term-projectile ansi-term buffer for `defualt-directory'."
+  (interactive)
+  (term-projectile-switch -1 default-directory))
+
+;;;###autoload
 (defun term-projectile-create-new (&optional directory)
   "Make a new `ansi-term' buffer for DIRECTORY.
 If directory is nil, use the current projectile project"
   (interactive)
   (switch-to-buffer
    (term-manager-build-term term-projectile-term-manager directory)))
+
+;;;###autoload
+(defun term-projectile-create-new-default-directory ()
+  "Make a new `ansi-term' buffer in `default-directory'."
+  (interactive)
+  (term-projectile-create-new default-directory))
 
 (provide 'term-projectile)
 ;;; term-projectile.el ends here
