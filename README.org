@@ -7,15 +7,21 @@ term-projectile manages terminals based on the current projectile context.
 Install from MELPA with ~M-x package-install term-projectile~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
 
 * Setup
-
 ** Emacs Configuration
-The author prefers to set up term-projectile using the following [[https://github.com/abo-abo/hydra][hydra]]:
+The author ([[https://github.com/IvanMalison/dotfiles#term-projectile][config here]]) prefers to set up term-projectile using the following [[https://github.com/abo-abo/hydra][hydra]]:
 #+BEGIN_SRC emacs-lisp
-  (defhydra imalison:term-hydra (global-map  "C-c 7")
+(defhydra imalison:term-hydra-default-directory ()
+    "term - default-directory"
+    ("n" term-projectile-default-directory-forward)
+    ("p" term-projectile-default-directory-backward)
+    ("c" term-projectile-create-new-default-directory))
+
+  (defhydra imalison:term-hydra ()
     "term"
     ("n" term-projectile-forward)
     ("p" term-projectile-backward)
-    ("c" term-projectile-create-new))
+    ("c" term-projectile-create-new)
+    ("d" imalison:term-hydra-default-directory/body :exit t))
 #+END_SRC
 
  When term-projectile-forward is executed in a projectile project where no terminal currently exists, a new ansi-term instance will be created. If one already exists, pressing that key binding will take the user to the existing ansi-term instance for that project.
