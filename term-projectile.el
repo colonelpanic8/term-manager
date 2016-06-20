@@ -48,6 +48,7 @@
 (defconst term-projectile-term-manager (term-projectile))
 
 (defun term-projectile-switch (&optional delta directory)
+  (when (stringp directory) (setq directory (intern directory)))
   (term-manager-switch-to-buffer
    term-projectile-term-manager directory delta))
 
@@ -82,6 +83,7 @@ Make a new one if none exists."
   "Make a new `ansi-term' buffer for DIRECTORY.
 If directory is nil, use the current projectile project"
   (interactive)
+  (when (stringp directory) (setq directory (intern directory)))
   (switch-to-buffer
    (term-manager-build-term term-projectile-term-manager directory)))
 
@@ -89,7 +91,8 @@ If directory is nil, use the current projectile project"
 (defun term-projectile-create-new-default-directory ()
   "Make a new `ansi-term' buffer in `default-directory'."
   (interactive)
-  (term-projectile-create-new default-directory))
+  (let ((directory (if (stringp default-directory) (intern default-directory))))
+    (term-projectile-create-new directory)))
 
 (provide 'term-projectile)
 ;;; term-projectile.el ends here
