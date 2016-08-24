@@ -52,6 +52,20 @@
   (term-manager-switch-to-buffer
    term-projectile-term-manager directory delta))
 
+(defun term-projectile-get-all-buffers ()
+  (term-manager-get-all-buffers term-projectile-term-manager))
+
+(defun term-projectile-select-existing ()
+  (completing-read "Select a term buffer: "
+                   (mapcar (imalison:compose-fn buffer-name car)
+                           (term-projectile-get-all-buffers))))
+
+;;;###autoload
+(defun term-projectile-switch-to ()
+  "Switch to an existing term-projectile buffer using `completing-read'."
+  (interactive)
+  (switch-to-buffer (term-projectile-select-existing)))
+
 ;;;###autoload
 (defun term-projectile-forward ()
   "Switch forward to the next term-projectile ansi-term buffer.

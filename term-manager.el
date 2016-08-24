@@ -131,5 +131,8 @@
   (term-manager-update-index-for-buffer tm buffer)
   (term-manager-rename-buffer tm buffer))
 
+(defmethod term-manager-get-all-buffers ((tm term-manager) &optional symbol)
+  (term-manager-im-pairs (oref tm :buffer-index) symbol))
+
 (provide 'term-manager)
 ;;; term-manager.el ends here
