@@ -22,6 +22,7 @@
 
 ;;; Code:
 
+(require 'dash)
 (require 'eieio)
 
 (defun term-manager-plist-delete (plist property)
@@ -76,6 +77,13 @@ This is in contrast to merely setting it to 0."
   (term-manager-im-unindex im key)
   (oset im :mapping
         (term-manager-plist-delete (oref im :mapping) key)))
+
+(defmethod term-manager-im-pairs ((im term-manager-im) &optional symbol)
+  (if symbol
+      (let ((values (term-manager-im-index-get (oref im :index) symbol)))
+        (cl-loop for value in values
+                 collect (list symbol value)))
+   (-partition 2 (oref im :mapping))))
 
 (provide 'term-manager-indexed-mapping)
 ;;; term-manager-indexed-mapping.el ends here
