@@ -102,7 +102,7 @@ If directory is nil, use the current projectile project"
   (term-projectile-switch -1 default-directory))
 
 ;;;###autoload
-(defun term-projectile-create-new-default-directory ()
+(defun term-projectile-default-directory-create-new ()
   "Make a new `ansi-term' buffer in `default-directory'."
   (interactive)
   (let ((directory (if (stringp default-directory) (intern default-directory))))
