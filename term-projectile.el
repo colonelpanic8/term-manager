@@ -55,7 +55,7 @@
     (setq directory (intern directory)))
   (let (args)
     (when directory-provided
-      (setq args (list :directory directory)))
+      (setq args (list :symbol directory)))
     (apply 'term-manager-switch-to-buffer
            term-projectile-term-manager :delta delta args)))
 
