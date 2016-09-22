@@ -5,7 +5,7 @@
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: term manager
 ;; URL: https://www.github.com/IvanMalison/term-manager
-;; Version: 0.0.0
+;; Version: 0.1.0
 ;; Package-Requires: ((dash "2.12.0") (emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
