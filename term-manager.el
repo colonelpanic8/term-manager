@@ -46,10 +46,13 @@
          (current-index (--find-index (eq it the-current-buffer) buffers)))
     (if current-index (mod (+ current-index delta) (length buffers)) 0)))
 
-(defmethod term-manager-purge-dead-buffers ((tm term-manager) symbol)
-  (cl-loop for buffer in (term-manager-im-index-get (oref tm buffer-index) symbol)
-           when (not (buffer-live-p buffer)) do
-           (term-manager-im-delete (oref tm buffer-index) buffer)))
+(defmethod term-manager-purge-dead-buffers ((tm term-manager) &optional symbol)
+  (let ((buffers (if symbol
+                    (term-manager-im-index-get (oref tm buffer-index) symbol)
+                  (term-manager-get-all-buffers tm))))
+    (cl-loop for buffer in buffers
+             when (not (buffer-live-p buffer))
+             do (term-manager-im-delete (oref tm buffer-index) buffer))))
 
 (cl-defmethod term-manager-get-buffer ((tm term-manager) &optional
                                        (symbol (term-manager-get-symbol tm))
