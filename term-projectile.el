@@ -57,7 +57,7 @@
 
 (defun term-projectile-select-existing ()
   (completing-read "Select a term buffer: "
-                   (mapcar (imalison:compose-fn buffer-name car)
+                   (mapcar 'buffer-name
                            (term-projectile-get-all-buffers))))
 
 ;;;###autoload

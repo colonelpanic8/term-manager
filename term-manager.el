@@ -132,7 +132,8 @@
   (term-manager-rename-buffer tm buffer))
 
 (defmethod term-manager-get-all-buffers ((tm term-manager) &optional symbol)
-  (term-manager-im-pairs (oref tm :buffer-index) symbol))
+  (cl-loop for (buffer name) in (term-manager-im-pairs (oref tm :buffer-index) symbol)
+           collect buffer))
 
 (provide 'term-manager)
 ;;; term-manager.el ends here
