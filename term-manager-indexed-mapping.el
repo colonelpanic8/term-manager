@@ -40,13 +40,13 @@ This is in contrast to merely setting it to 0."
    (index :initarg :index :initform nil)))
 
 (defmethod term-manager-im-get ((im term-manager-im) key)
-  (plist-get (oref im :mapping) key))
+  (plist-get (oref im mapping) key))
 
 (defmethod term-manager-im-index-get ((im term-manager-im) value)
-  (plist-get (oref im :index) value))
+  (plist-get (oref im index) value))
 
 (defmethod term-manager-im-index-get-one ((im term-manager-im) value)
-  (let ((keys (plist-get (oref im :index) value)))
+  (let ((keys (plist-get (oref im index) value)))
     (when keys (car keys))))
 
 (defmethod term-manager-im-maybe-put ((im term-manager-im) key value)
@@ -58,32 +58,32 @@ This is in contrast to merely setting it to 0."
   (term-manager-im-unindex im key)
   ;; Add the key to its new position in the index
   (oset im :index
-        (plist-put (oref im :index)
-                   value (cons key (plist-get (oref im :index) value))))
+        (plist-put (oref im index)
+                   value (cons key (plist-get (oref im index) value))))
   ;; Add the key, value pair to the mapping
   (oset im :mapping
-        (plist-put (oref im :mapping) key value)))
+        (plist-put (oref im mapping) key value)))
 
 (defmethod term-manager-im-unindex ((im term-manager-im) key)
-  (let* ((current-value (plist-get (oref im :mapping) key))
-         (value-list (plist-get (oref im :index) current-value)))
+  (let* ((current-value (plist-get (oref im mapping) key))
+         (value-list (plist-get (oref im index) current-value)))
     (when value-list
       (setq value-list (remove key value-list))
       (oset im :index
-            (plist-put (oref im :index)
+            (plist-put (oref im index)
                        current-value value-list)))))
 
 (defmethod term-manager-im-delete ((im term-manager-im) key)
   (term-manager-im-unindex im key)
   (oset im :mapping
-        (term-manager-plist-delete (oref im :mapping) key)))
+        (term-manager-plist-delete (oref im mapping) key)))
 
 (defmethod term-manager-im-pairs ((im term-manager-im) &optional symbol)
   (if symbol
-      (let ((values (term-manager-im-index-get (oref im :index) symbol)))
+      (let ((values (term-manager-im-index-get (oref im index) symbol)))
         (cl-loop for value in values
                  collect (list symbol value)))
-   (-partition 2 (oref im :mapping))))
+   (-partition 2 (oref im mapping))))
 
 (provide 'term-manager-indexed-mapping)
 ;;; term-manager-indexed-mapping.el ends here
