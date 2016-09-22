@@ -8,20 +8,73 @@ term-projectile [[http://melpa.org/#/term-projectile][file:http://melpa.org/pack
 Install from MELPA with ~M-x package-install term-projectile~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
 * Setup
 ** Emacs Configuration
-The author ([[https://github.com/IvanMalison/dotfiles#term-projectile][config here]]) prefers to set up term-projectile using the following [[https://github.com/abo-abo/hydra][hydra]]:
+The author ([[https://github.com/IvanMalison/dotfiles#term-projectile][config here]]) prefers to set up term-projectile using the following (now quite complicated) [[https://github.com/abo-abo/hydra][hydra]]:
 #+BEGIN_SRC emacs-lisp
-(defhydra imalison:term-hydra-default-directory ()
-  "term - default-directory"
-  ("n" term-projectile-default-directory-forward)
-  ("p" term-projectile-default-directory-backward)
-  ("c" term-projectile-create-new-default-directory))
+(defun imalison:maybe-symbol-name (arg)
+  (if (symbolp arg)
+      (symbol-name arg)
+    arg))
 
-(defhydra imalison:term-hydra ()
-  "term"
-  ("n" term-projectile-forward)
-  ("p" term-projectile-backward)
-  ("c" term-projectile-create-new)
-  ("d" imalison:term-hydra-default-directory/body :exit t))
+(defun imalison:concat-symbols (&rest args)
+  (intern (mapconcat 'imalison:maybe-symbol-name args "")))
+
+(defvar imalison:term-hydra-original-default-directory)
+
+(defhydra imalison:term-hydra-default-directory
+  (:body-pre
+   (term-projectile-default-directory-forward-restored))
+  "term - default-directory"
+  ("f" term-projectile-default-directory-forward-restored)
+  ("b" term-projectile-default-directory-backward-restored)
+  ("c" term-projectile-default-directory-create-new-restored)
+  ("d" term-projectile-default-directory-forward-restored)
+  ("g" imalison:term-hydra-global/body-restored :exit t)
+  ("p" imalison:term-hydra-projectile/body-restored :exit t))
+
+(defhydra imalison:term-hydra-projectile
+  (:body-pre
+   (progn
+     (term-projectile-forward-restored)))
+  "term - projectile"
+  ("f" term-projectile-forward-restored)
+  ("b" term-projectile-backward-restored)
+  ("c" term-projectile-create-new-restored)
+  ("d" imalison:term-hydra-default-directory/body-restored :exit t)
+  ("g" imalison:term-hydra-global/body-restored :exit t)
+  ("p" term-projectile-forward-restored))
+
+
+(defhydra imalison:term-hydra-global
+  (:body-pre
+   (progn (setq imalison:term-hydra-original-default-directory
+                default-directory)
+          (term-projectile-global-forward-restored)))
+  "term - global"
+  ("f" term-projectile-global-forward-restored)
+  ("b" term-projectile-global-backward-restored)
+  ("c" term-projectile-global-create-new-restored)
+  ("d" imalison:term-hydra-default-directory/body-restored :exit t)
+  ("g" term-projectile-global-forward-restored)
+  ("p" imalison:term-hydra-projectile/body-restored :exit t))
+
+(mapcar (lambda (term-projectile-function)
+          (defalias (imalison:concat-symbols term-projectile-function '-restored)
+            (lambda (&rest args)
+              (interactive)
+              (let ((default-directory imalison:term-hydra-original-default-directory))
+                (apply term-projectile-function args)))))
+        '(term-projectile-default-directory-forward
+          term-projectile-default-directory-backward
+          term-projectile-default-directory-create-new
+          term-projectile-forward
+          term-projectile-backward
+          term-projectile-create-new
+          term-projectile-global-forward
+          term-projectile-global-backward
+          term-projectile-global-create-new
+          imalison:term-hydra-global/body
+          imalison:term-hydra-projectile/body
+          imalison:term-hydra-default-directory/body))
 #+END_SRC
 
  When term-projectile-forward is executed in a projectile project where no terminal currently exists, a new ansi-term instance will be created. If one already exists, pressing that key binding will take the user to the existing ansi-term instance for that project.
