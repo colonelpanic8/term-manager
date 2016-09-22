@@ -81,6 +81,15 @@ Make a new one if none exists."
   (term-projectile-switch -1))
 
 ;;;###autoload
+(defun term-projectile-create-new (&optional directory)
+  "Make a new `ansi-term' buffer for DIRECTORY.
+If directory is nil, use the current projectile project"
+  (interactive)
+  (when (stringp directory) (setq directory (intern directory)))
+  (switch-to-buffer
+   (term-manager-build-term term-projectile-term-manager directory)))
+
+;;;###autoload
 (defun term-projectile-default-directory-forward ()
   "Switch forward to the next term-projectile ansi-term buffer for `defualt-directory'."
   (interactive)
@@ -91,15 +100,6 @@ Make a new one if none exists."
   "Switch backward to the next term-projectile ansi-term buffer for `defualt-directory'."
   (interactive)
   (term-projectile-switch -1 default-directory))
-
-;;;###autoload
-(defun term-projectile-create-new (&optional directory)
-  "Make a new `ansi-term' buffer for DIRECTORY.
-If directory is nil, use the current projectile project"
-  (interactive)
-  (when (stringp directory) (setq directory (intern directory)))
-  (switch-to-buffer
-   (term-manager-build-term term-projectile-term-manager directory)))
 
 ;;;###autoload
 (defun term-projectile-create-new-default-directory ()
