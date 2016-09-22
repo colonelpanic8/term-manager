@@ -55,7 +55,7 @@
              do (term-manager-im-delete (oref tm buffer-index) buffer))))
 
 (cl-defmethod term-manager-get-buffer ((tm term-manager) &optional
-                                       (symbol (term-manager-get-symbol tm))
+                                       symbol
                                        (buffer-index nil get-buffer-index))
   (unless symbol (setq symbol (term-manager-get-symbol tm)))
   (let* ((buffers (term-manager-get-terms tm symbol))
@@ -79,7 +79,7 @@
     (switch-to-buffer target-buffer)))
 
 (cl-defmethod term-manager-get-symbol ((tm term-manager) &optional
-                                       buffer)
+                                       (buffer (current-buffer)))
   (with-current-buffer buffer
     (funcall (oref tm get-symbol) buffer)))
 
@@ -99,6 +99,7 @@
 
 (cl-defmethod term-manager-build-term ((tm term-manager) &optional
                                        (symbol (term-manager-get-symbol tm)))
+    (unless symbol (setq symbol (term-manager-get-symbol tm)))
   (let* ((build-term (or (oref tm build-term)
                          'term-manager-default-build-term))
          (buffer (funcall build-term symbol)))
@@ -141,11 +142,14 @@
 (cl-defmethod term-manager-get-next-global-buffer
     ((tm term-manager) &key (buffer-order-function 'identity) (delta 1)
      (_current-buffer (current-buffer)))
+  (term-manager-purge-dead-buffers tm)
   (let* ((all-buffers (term-manager-get-all-buffers tm))
          (ordered-buffers (funcall buffer-order-function all-buffers))
-         (next-buffer-index (term-manager-get-next-buffer-index
-                             ordered-buffers delta)))
-    (nth ordered-buffers next-buffer-index)))
+         (next-buffer-index
+          (term-manager-get-next-buffer-index tm ordered-buffers delta)))
+    (if ordered-buffers
+        (nth next-buffer-index ordered-buffers)
+      (term-manager-build-term tm (intern default-directory)))))
 
 (provide 'term-manager)
 ;;; term-manager.el ends here
