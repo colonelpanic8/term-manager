@@ -44,20 +44,18 @@
 (defun term-projectile-get-symbol-for-buffer (buffer)
   (intern (with-current-buffer buffer
             (if (derived-mode-p 'term-mode)
+                ;; If we are in a term-mode buffer we should always associate
+                ;; with default-directory because we don't want buffers that
+                ;; were started in a project but moved to continue to be
+                ;; considered as directories of that project.
                 default-directory
               (let ((projectile-require-project-root nil))
                 (projectile-project-root))))))
 
 (defconst term-projectile-term-manager (term-projectile))
 
-(cl-defun term-projectile-switch (&optional delta (directory nil directory-provided))
-  (when (stringp directory)
-    (setq directory (intern directory)))
-  (let (args)
-    (when directory-provided
-      (setq args (list :symbol directory)))
-    (apply 'term-manager-switch-to-buffer
-           term-projectile-term-manager :delta delta args)))
+(defun term-projectile-switch (&rest args)
+  (apply 'term-manager-switch-to-buffer term-projectile-term-manager args))
 
 (defun term-projectile-global-switch (&rest args)
   (let ((default-directory term-projectile-global-directory))
@@ -83,17 +81,17 @@
   "Switch forward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
-  (term-projectile-switch 1))
+  (term-projectile-switch :symbol (intern (projectile-project-root))))
 
 ;;;###autoload
 (defun term-projectile-backward ()
   "Switch backward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
-  (term-projectile-switch -1))
+  (term-projectile-switch :delta -1 :symbol (intern (projectile-project-root))))
 
 ;;;###autoload
-(defun term-projectile-create-new (&optional directory)
+(cl-defun term-projectile-create-new (&optional (directory (projectile-project-root)))
   "Make a new `ansi-term' buffer for DIRECTORY.
 If directory is nil, use the current projectile project"
   (interactive)
@@ -105,13 +103,13 @@ If directory is nil, use the current projectile project"
 (defun term-projectile-default-directory-forward ()
   "Switch forward to the next term-projectile ansi-term buffer for `defualt-directory'."
   (interactive)
-  (term-projectile-switch nil default-directory))
+  (term-projectile-switch :symbol default-directory))
 
 ;;;###autoload
 (defun term-projectile-default-directory-backward ()
   "Switch backward to the next term-projectile ansi-term buffer for `defualt-directory'."
   (interactive)
-  (term-projectile-switch -1 default-directory))
+  (term-projectile-switch :delta -1 :symbol default-directory))
 
 ;;;###autoload
 (defun term-projectile-default-directory-create-new ()

@@ -42,9 +42,12 @@
 
 (cl-defmethod term-manager-get-next-buffer-index ((_tm term-manager)
                                                   buffers &optional (delta 1))
+  (unless delta (setq delta 1))
   (let* ((the-current-buffer (current-buffer))
          (current-index (--find-index (eq it the-current-buffer) buffers)))
-    (if current-index (mod (+ current-index delta) (length buffers)) 0)))
+    (if (and current-index buffers)
+        (mod (+ current-index delta) (length buffers))
+      0)))
 
 (defmethod term-manager-purge-dead-buffers ((tm term-manager) &optional symbol)
   (let ((buffers (if symbol
@@ -73,6 +76,8 @@
 (cl-defmethod term-manager-switch-to-buffer ((tm term-manager) &key
                                              (symbol (term-manager-get-symbol tm))
                                              (delta 1))
+  (when (stringp symbol)
+    (setq symbol (intern symbol)))
   (let* ((buffers (term-manager-get-terms tm symbol))
          (next-buffer-index (term-manager-get-next-buffer-index tm buffers delta))
          (target-buffer (term-manager-get-buffer tm symbol next-buffer-index)))
@@ -99,7 +104,7 @@
 
 (cl-defmethod term-manager-build-term ((tm term-manager) &optional
                                        (symbol (term-manager-get-symbol tm)))
-    (unless symbol (setq symbol (term-manager-get-symbol tm)))
+  (unless symbol (setq symbol (term-manager-get-symbol tm)))
   (let* ((build-term (or (oref tm build-term)
                          'term-manager-default-build-term))
          (buffer (funcall build-term symbol)))
