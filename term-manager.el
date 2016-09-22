@@ -138,5 +138,14 @@
   (cl-loop for (buffer name) in (term-manager-im-pairs (oref tm buffer-index) symbol)
            collect buffer))
 
+(cl-defmethod term-manager-get-next-global-buffer
+    ((tm term-manager) &key (buffer-order-function 'identity) (delta 1)
+     (_current-buffer (current-buffer)))
+  (let* ((all-buffers (term-manager-get-all-buffers tm))
+         (ordered-buffers (funcall buffer-order-function all-buffers))
+         (next-buffer-index (term-manager-get-next-buffer-index
+                             ordered-buffers delta)))
+    (nth ordered-buffers next-buffer-index)))
+
 (provide 'term-manager)
 ;;; term-manager.el ends here
