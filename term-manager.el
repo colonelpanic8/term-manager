@@ -40,9 +40,8 @@
    (name-buffer :initarg :name-buffer :initform nil)
    (build-term :initarg :build-term :initform nil)))
 
-(defmethod term-manager-get-next-buffer-index ((_tm term-manager)
-                                               buffers &optional delta)
-  (unless delta (setq delta 1))
+(cl-defmethod term-manager-get-next-buffer-index ((_tm term-manager)
+                                                  buffers &optional (delta 1))
   (let* ((the-current-buffer (current-buffer))
          (current-index (--find-index (eq it the-current-buffer) buffers)))
     (if current-index (mod (+ current-index delta) (length buffers)) 0)))
@@ -52,31 +51,32 @@
            when (not (buffer-live-p buffer)) do
            (term-manager-im-delete (oref tm :buffer-index) buffer)))
 
-(defmethod term-manager-get-buffer ((tm term-manager)
-                                    &optional symbol buffer-index)
+(cl-defmethod term-manager-get-buffer ((tm term-manager) &optional
+                                       (symbol (term-manager-get-symbol tm))
+                                       (buffer-index nil get-buffer-index))
   (unless symbol (setq symbol (term-manager-get-symbol tm)))
   (let* ((buffers (term-manager-get-terms tm symbol))
          (the-buffer-index
-          (if buffer-index buffer-index
+          (if get-buffer-index buffer-index
             (term-manager-get-next-buffer-index tm buffers))))
     (if buffers (nth the-buffer-index buffers)
       (term-manager-build-term tm symbol))))
 
-(defmethod term-manager-get-terms ((tm term-manager) &optional symbol)
-  (unless symbol (setq symbol (term-manager-get-symbol tm)))
+(cl-defmethod term-manager-get-terms ((tm term-manager) &optional
+                                      (symbol (term-manager-get-symbol tm)))
   (term-manager-purge-dead-buffers tm symbol)
   (term-manager-im-index-get (oref tm :buffer-index) symbol))
 
-(defmethod term-manager-switch-to-buffer ((tm term-manager)
-                                          &optional symbol delta)
-  (unless symbol (setq symbol (term-manager-get-symbol tm)))
+(cl-defmethod term-manager-switch-to-buffer ((tm term-manager) &optional
+                                             (symbol (term-manager-get-symbol tm))
+                                             delta)
   (let* ((buffers (term-manager-get-terms tm symbol))
          (next-buffer-index (term-manager-get-next-buffer-index tm buffers delta))
          (target-buffer (term-manager-get-buffer tm symbol next-buffer-index)))
     (switch-to-buffer target-buffer)))
 
-(defmethod term-manager-get-symbol ((tm term-manager) &optional buffer)
-  (unless buffer (setq buffer (current-buffer)))
+(cl-defmethod term-manager-get-symbol ((tm term-manager) &optional
+                                       (buffer (current-buffer)))
   (with-current-buffer buffer
     (funcall (oref tm :get-symbol) buffer)))
 
@@ -94,8 +94,8 @@
       (term-char-mode))
     buffer))
 
-(defmethod term-manager-build-term ((tm term-manager) &optional symbol)
-  (unless symbol (setq symbol (term-manager-get-symbol tm)))
+(cl-defmethod term-manager-build-term ((tm term-manager) &optional
+                                       (symbol (term-manager-get-symbol tm)))
   (let* ((build-term (or (oref tm :build-term)
                          'term-manager-default-build-term))
          (buffer (funcall build-term symbol)))
@@ -105,20 +105,20 @@
 (defun term-manager-default-name-buffer (_buffer symbol)
   (format "term - %s" symbol))
 
-(defmethod term-manager-get-buffer-name ((tm term-manager) &optional buffer)
+(defmethod term-manager-get-buffer-name ((tm term-manager) &optional
+                                         (buffer (current-buffer)))
   (let ((name-buffer (or (oref tm :name-buffer)
                          'term-manager-default-name-buffer)))
-    (unless buffer (setq buffer (current-buffer)))
     (funcall name-buffer buffer (term-manager-get-symbol tm buffer))))
 
-(defmethod term-manager-rename-buffer ((tm term-manager) &optional buffer)
+(cl-defmethod term-manager-rename-buffer ((tm term-manager) &optional
+                                          (buffer (current-buffer)))
   (with-current-buffer buffer
     (rename-buffer (term-manager-get-buffer-name tm buffer) t)))
 
-(defmethod term-manager-update-index-for-buffer ((tm term-manager)
-                                                 &optional buffer new-symbol)
-  (unless buffer (setq buffer (current-buffer)))
-  (unless new-symbol (setq new-symbol (term-manager-get-symbol tm buffer)))
+(cl-defmethod term-manager-update-index-for-buffer
+    ((tm term-manager) &optional (buffer (current-buffer))
+     (symbol (term-manager-get-symbol tm)))
   (term-manager-im-maybe-put (oref tm :buffer-index) buffer new-symbol))
 
 (defmethod term-manager-enable-buffer-renaming-and-reindexing ((tm term-manager))
@@ -126,8 +126,8 @@
               (lambda (&rest _args)
                 (term-manager-on-update-context tm))))
 
-(defmethod term-manager-on-update-context ((tm term-manager) &optional buffer)
-  (unless buffer (setq buffer (current-buffer)))
+(cl-defmethod term-manager-on-update-context ((tm term-manager) &optional
+                                              (buffer (current-buffer)))
   (term-manager-update-index-for-buffer tm buffer)
   (term-manager-rename-buffer tm buffer))
 
