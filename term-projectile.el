@@ -47,10 +47,14 @@
 
 (defconst term-projectile-term-manager (term-projectile))
 
-(defun term-projectile-switch (&optional delta directory)
-  (when (stringp directory) (setq directory (intern directory)))
-  (term-manager-switch-to-buffer
-   term-projectile-term-manager directory delta))
+(cl-defun term-projectile-switch (&optional delta (directory nil directory-provided))
+  (when (stringp directory)
+    (setq directory (intern directory)))
+  (let ((args))
+    (when directory-provided
+      (setq args (list :directory directory)))
+    (apply 'term-manager-switch-to-buffer
+     term-projectile-term-manager :delta delta args)))
 
 (defun term-projectile-get-all-buffers ()
   (term-manager-get-all-buffers term-projectile-term-manager))
