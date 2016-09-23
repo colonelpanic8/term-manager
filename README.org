@@ -1,6 +1,7 @@
 term-manager [[http://melpa.org/#/term-manager][file:http://melpa.org/packages/term-manager-badge.svg]] [[https://stable.melpa.org/#/term-manager][file:https://stable.melpa.org/packages/term-manager-badge.svg]]
 
-term-projectile [[http://melpa.org/#/term-projectile][file:http://melpa.org/packages/term-projectile-badge.svg ]][[https://stable.melpa.org/#/term-projectile][file:https://stable.melpa.org/packages/term-projectile-badge.svg]]
+term-projectile [[http://melpa.org/#/term-projectile][file:http://melpa.org/packages/term-projectile-badge.svg]]
+[[https://stable.melpa.org/#/term-projectile][file:https://stable.melpa.org/packages/term-projectile-badge.svg]]
 
 * About
 ~term-projectile~ manages terminals in groups based on the current projectile context. With a single keystroke, it will either create a new terminal for the current project, or take you to one that already exists. If more than one terminal exists for your project, it will let you easily cycle through those existing terminals. ~term-manager~ is used to support ~term-projectile~, though it can theoretically be used without ~term-projectile~.
