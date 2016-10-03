@@ -4,7 +4,7 @@
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: term manager projectile
-;; URL: https://www.github.com/IvanMalison/term-projectile
+;; URL: https://www.github.com/IvanMalison/term-manager
 ;; Version: 0.1.0
 ;; Package-Requires: ((term-manager "0.1.0") (projectile "0.13.0"))
 
