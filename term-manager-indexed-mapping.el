@@ -31,7 +31,7 @@ This is in contrast to merely setting it to 0."
   (let (p)
     (while plist
       (if (not (eq property (car plist)))
-	  (setq p (plist-put p (car plist) (nth 1 plist))))
+          (setq p (plist-put p (car plist) (nth 1 plist))))
       (setq plist (cddr plist)))
     p))
 
@@ -83,7 +83,7 @@ This is in contrast to merely setting it to 0."
       (let ((values (term-manager-im-index-get (oref im index) symbol)))
         (cl-loop for value in values
                  collect (list symbol value)))
-   (-partition 2 (oref im mapping))))
+    (-partition 2 (oref im mapping))))
 
 (provide 'term-manager-indexed-mapping)
 ;;; term-manager-indexed-mapping.el ends here
