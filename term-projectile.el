@@ -55,7 +55,7 @@
 (defconst term-projectile-term-manager (term-projectile))
 
 (defun term-projectile-switch (&rest args)
-  (apply 'term-manager-switch-to-buffer term-projectile-term-manager args))
+  (apply 'term-manager-display-buffer term-projectile-term-manager args))
 
 (defun term-projectile-global-switch (&rest args)
   (let ((default-directory term-projectile-global-directory))

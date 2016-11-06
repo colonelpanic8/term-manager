@@ -33,6 +33,9 @@
 (require 'term)
 (require 'term-manager-indexed-mapping)
 
+(defun term-manager-display-buffer (buffer)
+  (switch-to-buffer buffer))
+
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
                  (make-instance term-manager-im))
@@ -73,15 +76,14 @@
   (term-manager-purge-dead-buffers tm symbol)
   (term-manager-im-index-get (oref tm buffer-index) symbol))
 
-(cl-defmethod term-manager-switch-to-buffer ((tm term-manager) &key
-                                             (symbol (term-manager-get-symbol tm))
-                                             (delta 1))
+(cl-defmethod term-manager-display-buffer
+    ((tm term-manager) &key (symbol (term-manager-get-symbol tm)) (delta 1))
   (when (stringp symbol)
     (setq symbol (intern symbol)))
   (let* ((buffers (term-manager-get-terms tm symbol))
          (next-buffer-index (term-manager-get-next-buffer-index tm buffers delta))
          (target-buffer (term-manager-get-buffer tm symbol next-buffer-index)))
-    (switch-to-buffer target-buffer)))
+    (term-manager-display-buffer target-buffer)))
 
 (cl-defmethod term-manager-get-symbol ((tm term-manager) &optional
                                        (buffer (current-buffer)))
