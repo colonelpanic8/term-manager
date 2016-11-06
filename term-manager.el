@@ -76,7 +76,7 @@
   (term-manager-purge-dead-buffers tm symbol)
   (term-manager-im-index-get (oref tm buffer-index) symbol))
 
-(cl-defmethod term-manager-display-buffer
+(cl-defmethod term-manager-display-term
     ((tm term-manager) &key (symbol (term-manager-get-symbol tm)) (delta 1))
   (when (stringp symbol)
     (setq symbol (intern symbol)))
