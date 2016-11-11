@@ -34,7 +34,7 @@
 (require 'term-manager-indexed-mapping)
 
 (defun term-manager-display-buffer (buffer)
-  (switch-to-buffer buffer))
+  (display-buffer buffer))
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
