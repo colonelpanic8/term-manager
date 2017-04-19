@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
-;; Keywords: term manager
+;; Keywords: term manager tools
 ;; URL: https://www.github.com/IvanMalison/term-manager
 ;; Version: 0.1.1
 ;; Package-Requires: ((dash "2.12.0") (emacs "24.4"))
@@ -33,8 +33,18 @@
 (require 'term)
 (require 'term-manager-indexed-mapping)
 
+(defgroup term-manager ()
+  "Frames minor mode."
+  :group 'term-manager
+  :prefix "term-manager-")
+
+(defcustom term-manager-display-buffer-alist nil
+  "Alist provided to `display-buffer' by `term-manager-display-buffer'."
+  :group 'term-manager
+  :type '(alist :key-type symbol :value-type sexp))
+
 (defun term-manager-display-buffer (buffer)
-  (display-buffer buffer))
+  (display-buffer buffer term-manager-display-buffer-alist))
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
