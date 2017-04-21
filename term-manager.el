@@ -3,7 +3,7 @@
 ;; Copyright (C) 2016 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
-;; Keywords: term manager tools
+;; Keywords: terminals tools
 ;; URL: https://www.github.com/IvanMalison/term-manager
 ;; Version: 0.1.1
 ;; Package-Requires: ((dash "2.12.0") (emacs "24.4"))
