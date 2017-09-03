@@ -44,7 +44,12 @@
   :type '(alist :key-type symbol :value-type sexp))
 
 (defun term-manager-display-buffer (buffer)
-  (display-buffer buffer term-manager-display-buffer-alist))
+  (display-buffer buffer term-manager-display-buffer-alist)
+  (let* ((window (get-buffer-window buffer t))
+         (frame (window-frame window)))
+    (when window
+      (select-window window)
+      (select-frame-set-input-focus frame))))
 
 (defclass term-manager ()
   ((buffer-index :initarg :buffer-index :initform
