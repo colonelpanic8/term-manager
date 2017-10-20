@@ -96,7 +96,8 @@
   (when (stringp symbol)
     (setq symbol (intern symbol)))
   (let* ((buffers (term-manager-get-terms tm symbol))
-         (next-buffer-index (term-manager-get-next-buffer-index tm buffers delta))
+         (next-buffer-index
+          (term-manager-get-next-buffer-index tm buffers delta))
          (target-buffer (term-manager-get-buffer tm symbol next-buffer-index)))
     (term-manager-display-buffer target-buffer)))
 

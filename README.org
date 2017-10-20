@@ -9,7 +9,7 @@ term-projectile [[http://melpa.org/#/term-projectile][file:http://melpa.org/pack
 Install from MELPA with ~M-x package-install term-projectile~. See the [[https://github.com/milkypostman/melpa][melpa repository]] for details about how to set up MELPA if you have not already done so.
 * Setup
 ** Emacs Configuration
-The author ([[https://github.com/IvanMalison/dotfiles#term-projectile][config here]]) prefers to set up term-projectile using the following (now quite complicated) [[https://github.com/abo-abo/hydra][hydra]]:
+The author ([[http://ivanmalison.github.io/dotfiles/#termprojectile][config here]]) prefers to set up term-projectile using the following (now quite complicated) [[https://github.com/abo-abo/hydra][hydra]]:
 #+BEGIN_SRC emacs-lisp
 (defun imalison:maybe-symbol-name (arg)
   (if (symbolp arg)
@@ -81,7 +81,9 @@ The author ([[https://github.com/IvanMalison/dotfiles#term-projectile][config he
  When term-projectile-forward is executed in a projectile project where no terminal currently exists, a new ansi-term instance will be created. If one already exists, pressing that key binding will take the user to the existing ansi-term instance for that project.
 
 ** Terminal Support
-You will need to add something like the following to your shell's configuration file, along with the snippet from one of the headings below that corresponds to your shell of choice.
+To get automatic directory changing You will need to add something like the
+following to your shell's configuration file, along with the snippet from one of
+the headings below that corresponds to your shell of choice.
 #+BEGIN_SRC sh
 function environment_variable_exists {
     eval "value=\"\${$1+x}\""
