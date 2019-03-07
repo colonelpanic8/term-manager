@@ -41,8 +41,11 @@
     (term-manager-enable-buffer-renaming-and-reindexing manager)
     manager))
 
+(defun maybe-intern (value)
+  (when value (intern value)))
+
 (defun term-projectile-get-symbol-for-buffer (buffer)
-  (intern (with-current-buffer buffer
+  (maybe-intern (with-current-buffer buffer
             (if (derived-mode-p 'term-mode)
                 ;; If we are in a term-mode buffer we should always associate
                 ;; with default-directory because we don't want buffers that
@@ -60,7 +63,7 @@
 (defun term-projectile-global-switch (&rest args)
   (let ((default-directory term-projectile-global-directory))
     (term-manager-display-buffer (apply 'term-manager-get-next-global-buffer
-                             term-projectile-term-manager args))))
+                                        term-projectile-term-manager args))))
 
 (defun term-projectile-get-all-buffers ()
   (term-manager-get-all-buffers term-projectile-term-manager))
@@ -81,21 +84,21 @@
   "Switch forward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
-  (term-projectile-switch :symbol (intern (projectile-project-root))))
+  (term-projectile-switch :symbol (maybe-intern (projectile-project-root))))
 
 ;;;###autoload
 (defun term-projectile-backward ()
   "Switch backward to the next term-projectile ansi-term buffer.
 Make a new one if none exists."
   (interactive)
-  (term-projectile-switch :delta -1 :symbol (intern (projectile-project-root))))
+  (term-projectile-switch :delta -1 :symbol (maybe-intern (projectile-project-root))))
 
 ;;;###autoload
 (cl-defun term-projectile-create-new (&optional (directory (projectile-project-root)))
   "Make a new `ansi-term' buffer for DIRECTORY.
 If directory is nil, use the current projectile project"
   (interactive)
-  (when (stringp directory) (setq directory (intern directory)))
+  (when (stringp directory) (setq directory (maybe-intern directory)))
   (term-manager-display-buffer
    (term-manager-build-term term-projectile-term-manager directory)))
 
@@ -115,7 +118,7 @@ If directory is nil, use the current projectile project"
 (defun term-projectile-default-directory-create-new ()
   "Make a new `ansi-term' buffer in `default-directory'."
   (interactive)
-  (let ((directory (if (stringp default-directory) (intern default-directory))))
+  (let ((directory (if (stringp default-directory) (maybe-intern default-directory))))
     (term-projectile-create-new directory)))
 
 ;;;###autoload
