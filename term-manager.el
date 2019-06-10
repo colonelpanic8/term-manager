@@ -106,7 +106,11 @@
   (with-current-buffer buffer
     (funcall (oref tm get-symbol) buffer)))
 
+(defvar term-manager-temp-buffer-name "new-term-manager-buffer-temp-name")
+
 (defun term-manager-default-build-term (directory-symbol)
+  (when (get-buffer term-manager-temp-buffer-name)
+    (kill-buffer term-manager-temp-buffer-name))
   (let* ((directory (symbol-name directory-symbol))
          (default-directory directory)
          (program (getenv "SHELL"))
@@ -114,7 +118,7 @@
                   ;; We need to use a name that is guaranteed to be
                   ;; unique so that term-ansi-make-term always makes a
                   ;; new term.
-                  (term-ansi-make-term "new term temp name" program))))
+                  (term-ansi-make-term term-manager-temp-buffer-name program))))
     (with-current-buffer buffer
       (term-mode)
       (term-char-mode))
