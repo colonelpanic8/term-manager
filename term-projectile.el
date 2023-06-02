@@ -66,6 +66,7 @@
                                         term-projectile-term-manager args))))
 
 (defun term-projectile-get-all-buffers ()
+  (term-manager-purge-dead-buffers term-projectile-term-manager)
   (term-manager-get-all-buffers term-projectile-term-manager))
 
 (defun term-projectile-select-existing ()
