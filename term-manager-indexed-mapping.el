@@ -39,21 +39,21 @@ This is in contrast to merely setting it to 0."
   ((mapping :initarg :mapping :initform nil)
    (index :initarg :index :initform nil)))
 
-(defmethod term-manager-im-get ((im term-manager-im) key)
+(cl-defmethod term-manager-im-get ((im term-manager-im) key)
   (plist-get (oref im mapping) key))
 
-(defmethod term-manager-im-index-get ((im term-manager-im) value)
+(cl-defmethod term-manager-im-index-get ((im term-manager-im) value)
   (plist-get (oref im index) value))
 
-(defmethod term-manager-im-index-get-one ((im term-manager-im) value)
+(cl-defmethod term-manager-im-index-get-one ((im term-manager-im) value)
   (let ((keys (plist-get (oref im index) value)))
     (when keys (car keys))))
 
-(defmethod term-manager-im-maybe-put ((im term-manager-im) key value)
+(cl-defmethod term-manager-im-maybe-put ((im term-manager-im) key value)
   (unless (equal (term-manager-im-get im key) value)
     (term-manager-im-put im key value)))
 
-(defmethod term-manager-im-put ((im term-manager-im) key value)
+(cl-defmethod term-manager-im-put ((im term-manager-im) key value)
   ;; Handle removing the key from where it is currently indexed
   (term-manager-im-unindex im key)
   ;; Add the key to its new position in the index
@@ -64,7 +64,7 @@ This is in contrast to merely setting it to 0."
   (oset im :mapping
         (plist-put (oref im mapping) key value)))
 
-(defmethod term-manager-im-unindex ((im term-manager-im) key)
+(cl-defmethod term-manager-im-unindex ((im term-manager-im) key)
   (let* ((current-value (plist-get (oref im mapping) key))
          (value-list (plist-get (oref im index) current-value)))
     (when value-list
@@ -73,12 +73,12 @@ This is in contrast to merely setting it to 0."
             (plist-put (oref im index)
                        current-value value-list)))))
 
-(defmethod term-manager-im-delete ((im term-manager-im) key)
+(cl-defmethod term-manager-im-delete ((im term-manager-im) key)
   (term-manager-im-unindex im key)
   (oset im :mapping
         (term-manager-plist-delete (oref im mapping) key)))
 
-(defmethod term-manager-im-pairs ((im term-manager-im) &optional symbol)
+(cl-defmethod term-manager-im-pairs ((im term-manager-im) &optional symbol)
   (if symbol
       (let ((values (term-manager-im-index-get (oref im index) symbol)))
         (cl-loop for value in values

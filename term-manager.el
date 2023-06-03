@@ -67,7 +67,7 @@
         (mod (+ current-index delta) (length buffers))
       0)))
 
-(defmethod term-manager-purge-dead-buffers ((tm term-manager) &optional symbol)
+(cl-defmethod term-manager-purge-dead-buffers ((tm term-manager) &optional symbol)
   (let ((buffers (if symbol
                     (term-manager-im-index-get (oref tm buffer-index) symbol)
                   (term-manager-get-all-buffers tm))))
@@ -152,7 +152,7 @@
      (symbol (term-manager-get-symbol tm)))
   (term-manager-im-maybe-put (oref tm buffer-index) buffer symbol))
 
-(defmethod term-manager-enable-buffer-renaming-and-reindexing ((tm term-manager))
+(cl-defmethod term-manager-enable-buffer-renaming-and-reindexing ((tm term-manager))
   (advice-add 'term-handle-ansi-terminal-messages :after
               (lambda (&rest _args)
                 (term-manager-on-update-context tm))))
@@ -162,7 +162,7 @@
   (term-manager-update-index-for-buffer tm buffer)
   (term-manager-rename-buffer tm buffer))
 
-(defmethod term-manager-get-all-buffers ((tm term-manager) &optional symbol)
+(cl-defmethod term-manager-get-all-buffers ((tm term-manager) &optional symbol)
   (cl-loop for (buffer _) in (term-manager-im-pairs (oref tm buffer-index) symbol)
            collect buffer))
 
