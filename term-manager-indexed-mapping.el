@@ -1,6 +1,6 @@
 ;;; term-manager-indexed-mapping.el --- -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 Ivan Malison
+;; Copyright (C) 2016-2023 Ivan Malison
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

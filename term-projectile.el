@@ -1,6 +1,6 @@
 ;;; term-projectile.el --- projectile terminal management -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 Ivan Malison
+;; Copyright (C) 2016-2023 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: projectile tools terminals vc

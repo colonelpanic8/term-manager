@@ -1,6 +1,6 @@
 ;;; term-manager.el --- Contextual terminal management -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 Ivan Malison
+;; Copyright (C) 2016-2023 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: terminals tools
