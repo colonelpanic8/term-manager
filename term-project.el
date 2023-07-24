@@ -63,13 +63,13 @@
 (defun term-project-switch (&rest args)
   "Switch terms in the current project.
 ARGS is passed to `term-manager-display-term'."
-  (apply 'term-manager-display-term term-project-term-manager args))
+  (apply #'term-manager-display-term term-project-term-manager args))
 
 (defun term-project-global-switch (&rest args)
   "Switch terms globally.
 ARGS is passed to `term-manager-get-next-global-buffer'."
   (let ((default-directory term-project-global-directory))
-    (term-manager-display-buffer (apply 'term-manager-get-next-global-buffer
+    (term-manager-display-buffer (apply #'term-manager-get-next-global-buffer
                                         term-project-term-manager args))))
 
 (defun term-project-get-all-buffers ()
@@ -80,7 +80,7 @@ ARGS is passed to `term-manager-get-next-global-buffer'."
 (defun term-project-select-existing ()
   "Select `project-term' buffer in the current project."
   (completing-read "Select a term buffer: "
-                   (mapcar 'buffer-name
+                   (mapcar #'buffer-name
                            (term-project-get-all-buffers))))
 
 ;;;###autoload
