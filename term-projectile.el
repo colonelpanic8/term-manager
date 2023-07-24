@@ -58,11 +58,11 @@
 (defconst term-projectile-term-manager (term-projectile))
 
 (defun term-projectile-switch (&rest args)
-  (apply 'term-manager-display-term term-projectile-term-manager args))
+  (apply #'term-manager-display-term term-projectile-term-manager args))
 
 (defun term-projectile-global-switch (&rest args)
   (let ((default-directory term-projectile-global-directory))
-    (term-manager-display-buffer (apply 'term-manager-get-next-global-buffer
+    (term-manager-display-buffer (apply #'term-manager-get-next-global-buffer
                                         term-projectile-term-manager args))))
 
 (defun term-projectile-get-all-buffers ()
@@ -71,7 +71,7 @@
 
 (defun term-projectile-select-existing ()
   (completing-read "Select a term buffer: "
-                   (mapcar 'buffer-name
+                   (mapcar #'buffer-name
                            (term-projectile-get-all-buffers))))
 
 ;;;###autoload
