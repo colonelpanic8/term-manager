@@ -105,13 +105,13 @@ If directory is nil, use the current projectile project"
 
 ;;;###autoload
 (defun term-projectile-default-directory-forward ()
-  "Switch forward to the next term-projectile ansi-term buffer for `defualt-directory'."
+  "Switch forward to the next term-projectile ansi-term buffer for `default-directory'."
   (interactive)
   (term-projectile-switch :symbol default-directory))
 
 ;;;###autoload
 (defun term-projectile-default-directory-backward ()
-  "Switch backward to the next term-projectile ansi-term buffer for `defualt-directory'."
+  "Switch backward to the next term-projectile ansi-term buffer for `default-directory'."
   (interactive)
   (term-projectile-switch :delta -1 :symbol default-directory))
 
