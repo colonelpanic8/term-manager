@@ -1,6 +1,6 @@
 ;;; term-projectile.el --- projectile terminal management -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2023 Ivan Malison
+;; Copyright (C) 2016-2024 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: projectile tools terminals vc
@@ -32,12 +32,14 @@
 
 (defvar term-projectile-global-directory "~")
 
-(defun term-projectile ()
+(defun term-projectile (&rest args)
   "Make a new term-manger instance configured for projectile usage."
   (interactive)
   (let ((manager
-         (make-instance 'term-manager
-                        :get-symbol 'term-projectile-get-symbol-for-buffer)))
+         (apply 'make-instance
+                'term-manager
+                :get-symbol 'term-projectile-get-symbol-for-buffer
+                args)))
     (term-manager-enable-buffer-renaming-and-reindexing manager)
     manager))
 
@@ -46,7 +48,7 @@
 
 (defun term-projectile-get-symbol-for-buffer (buffer)
   (maybe-intern (with-current-buffer buffer
-            (if (derived-mode-p 'term-mode)
+            (if (or (derived-mode-p 'term-mode) (derived-mode-p 'eat-mode))
                 ;; If we are in a term-mode buffer we should always associate
                 ;; with default-directory because we don't want buffers that
                 ;; were started in a project but moved to continue to be
@@ -55,7 +57,7 @@
               (let ((projectile-require-project-root nil))
                 (projectile-project-root))))))
 
-(defconst term-projectile-term-manager (term-projectile))
+(defvar term-projectile-term-manager (term-projectile))
 
 (defun term-projectile-switch (&rest args)
   (apply #'term-manager-display-term term-projectile-term-manager args))
@@ -100,6 +102,7 @@ Make a new one if none exists."
 If directory is nil, use the current projectile project"
   (interactive)
   (when (stringp directory) (setq directory (maybe-intern directory)))
+  (when (not directory) (setq directory "~"))
   (term-manager-display-buffer
    (term-manager-build-term term-projectile-term-manager directory)))
 

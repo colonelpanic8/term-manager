@@ -1,6 +1,6 @@
 ;;; term-project.el --- Terminal management for project.el -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2023 Ivan Malison
+;; Copyright (C) 2016-2024 Ivan Malison
 ;; Copyright (C) 2023 ROCKTAKEY
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
@@ -34,12 +34,13 @@
 
 (defvar term-project-global-directory "~")
 
-(defun term-project ()
+(defun term-project (&rest args)
   "Make a new term-manger instance configured for project usage."
   (interactive)
   (let ((manager
-         (make-instance 'term-manager
-                        :get-symbol 'term-project-get-symbol-for-buffer)))
+         (apply 'make-instance
+                'term-manager
+                :get-symbol 'term-project-get-symbol-for-buffer args)))
     (term-manager-enable-buffer-renaming-and-reindexing manager)
     manager))
 

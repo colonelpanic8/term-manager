@@ -1,6 +1,6 @@
 ;;; term-manager.el --- Contextual terminal management -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2023 Ivan Malison
+;; Copyright (C) 2016-2024 Ivan Malison
 
 ;; Author: Ivan Malison <IvanMalison@gmail.com>
 ;; Keywords: terminals tools
@@ -133,8 +133,15 @@
     (term-manager-on-update-context tm buffer)
     buffer))
 
+(defun term-manager-replace-home-with-tilde (path)
+  "Replace the home directory in PATH with ~."
+  (let ((home (expand-file-name "~")))
+    (if (string-prefix-p home path)
+        (concat "~" (substring path (length home)))
+      path)))
+
 (defun term-manager-default-name-buffer (_buffer symbol)
-  (format "term - %s" symbol))
+  (format "term - %s" (term-manager-replace-home-with-tilde (symbol-name symbol))))
 
 (cl-defmethod term-manager-get-buffer-name ((tm term-manager) &optional
                                             (buffer (current-buffer)))
