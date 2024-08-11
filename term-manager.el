@@ -127,6 +127,8 @@
 (cl-defmethod term-manager-build-term ((tm term-manager) &optional
                                        (symbol (term-manager-get-symbol tm)))
   (unless symbol (setq symbol (term-manager-get-symbol tm)))
+  (when (get-buffer term-manager-temp-buffer-name)
+    (kill-buffer term-manager-temp-buffer-name))
   (let* ((build-term (or (oref tm build-term)
                          'term-manager-default-build-term))
          (buffer (funcall build-term symbol)))
