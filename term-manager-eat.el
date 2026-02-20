@@ -41,4 +41,6 @@
   (advice-add 'eat--t-set-cwd :after
               (lambda (&rest _args)
                 (term-manager-on-update-context tm))))
+
+(provide 'term-manager-eat)
 ;;; term-manager-eat.el ends here
